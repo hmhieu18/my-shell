@@ -11,8 +11,8 @@
 #include <sys/wait.h>
 
 #define MAX_ARGS 10
-#define MAX_ARG_LENGTH 100
-#define MAX_CMD_LENGTH 1000
+#define MAX_ARG_LENGTH 50
+#define MAX_CMD_LENGTH 500
 #define GREEN "\x1B[32m"
 #define NORMAL "\x1B[0m"
 #define BLUE "\x1B[34m"

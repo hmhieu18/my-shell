@@ -1,11 +1,11 @@
 10
+sleep 10 &
+sleep
+sleep 10
+sleep 5
 exit
-history
-history
-ls
-ls
-history
-ls
 exit
-ls
+make clean
+make
+exit
 exit

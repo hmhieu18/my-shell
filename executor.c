@@ -171,20 +171,38 @@ void execLS(char *args[], int nArgs)
 void execHistory(char *args[], int nArgs, char path[])
 {
     FILE *file = fopen(path, "r");
+    char *list[10];
+    int i = 0;
     if (file)
     {
-        int i = 0;
-        char s[MAX_CMD_LENGTH];
+
+        char *s = calloc(MAX_CMD_LENGTH, sizeof(char));
         fgets(s, MAX_CMD_LENGTH, file);
         while (fgets(s, MAX_CMD_LENGTH, file))
         {
-            printf("%d: %s", i + 1, s);
+            if (nArgs == 1)
+                printf("%d: %s", i + 1, s);
+            list[i] = s;
+            s = calloc(MAX_CMD_LENGTH, sizeof(char));
             i++;
         }
 
         fclose(file);
+        printf("\n");
     }
-    printf("\n");
+    if (nArgs == 3 && strcmp(args[nArgs - 2], ">") == 0)
+    {
+        file = fopen(args[nArgs - 1], "w");
+        if (file)
+        {
+            for (int it = 0; it < i; it++)
+            {
+                fprintf(file, "%d: %s", it + 1, list[it]);
+                free(list[it]);
+            }
+            fclose(file);
+        }
+    }
 }
 bool execBuiltin(char *args[], int nArgs, char path[])
 {

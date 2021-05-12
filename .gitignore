@@ -3,3 +3,4 @@ build
 src
 .depend
 shell
+*.sh

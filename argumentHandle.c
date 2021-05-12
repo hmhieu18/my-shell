@@ -92,50 +92,77 @@ int getLastApperance(char buf[], char chr)
     }
     return -1;
 }
-void getLastHist()
+void getLastHist(char s[], char path[])
 {
-    FILE *file = fopen(".history.txt", "r");
-    char s[1000];
+    FILE *file = fopen(path, "r");
     int i = 0;
     if (file)
     {
-        while (!feof(file))
+        fscanf(file, "%d", &i);
+        char ch;
+        fscanf(file, "%c", &ch);
+        int j=0;
+        while (fgets(s, MAX_CMD_LENGTH, file)&&j<i)
         {
-            fscanf(file, "%d", &i);
-            fscanf(file, "%s", &s);
+            j++;
         }
         printf("%s\n", s);
         fclose(file);
     }
 }
-void updateHistory(char x[200])
+void updateHistory(char buf[], char path[])
 {
-    FILE *file = fopen(".history.txt", "r");
-    char s[1000];
+    FILE *file = fopen(path, "r");
+    char *s;
+    char *list[10];
     int i = 0;
+    int cnt = 0;
     if (file)
     {
-        while (!feof(file))
+
+        fscanf(file, "%d", &cnt);
+        char ch;
+        fscanf(file, "%c", &ch);
+        if (cnt == 10)
         {
-            fscanf(file, "%d", &i);
-            fscanf(file, "%s", &s);
+            s = calloc(MAX_CMD_LENGTH, sizeof(char));
+            fgets(s, MAX_CMD_LENGTH, file);
+            free(s);
+        }
+
+        s = calloc(MAX_CMD_LENGTH, sizeof(char));
+        while (fgets(s, MAX_CMD_LENGTH, file))
+        {
+            list[i] = s;
+            s = calloc(MAX_CMD_LENGTH, sizeof(char));
+            i++;
         }
         fclose(file);
     }
 
-    file = fopen(".history.txt", "a");
-    fprintf(file, "%d %s", i + 1, x);
-
+    file = fopen(path, "w");
+    fprintf(file, "%d\n", i + 1);
+    for (int it = 0; it < i; it++)
+    {
+        fprintf(file, "%s", list[it]);
+        free(list[it]);
+    }
+    fprintf(file, "%s", buf);
     fclose(file);
 }
 
-void input(char *args[])
+void input(char *args[], char path[])
 {
-
-    char str[MAX_ARG_LENGTH * MAX_ARGS];
-    fgets(str, 200, stdin);
-
-    updateHistory(str);
+    char str[MAX_CMD_LENGTH];
+    fgets(str, MAX_CMD_LENGTH, stdin);
+    if (strcmp(str, "!!\n") == 0)
+    {
+        getLastHist(str, path);
+    }
+    else
+    {
+        updateHistory(str, path);
+    }
     int nArgs = countArgsStr(str);
 
     constructArgs(args, nArgs);

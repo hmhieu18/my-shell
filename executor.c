@@ -168,23 +168,25 @@ void execLS(char *args[], int nArgs)
     destructArgs(args);
 }
 
-void execHistory(char *args[], int nArgs)
+void execHistory(char *args[], int nArgs, char path[])
 {
-    FILE* file = fopen(".history.txt", "r");
-    char s[1000];
-    int i = 0;
-    if(file){
-    fscanf (file, "%d", &i);
-    while (fgets (s, 1000, file))
-    {  
-      printf ("%d ", i);
-      printf("%s", s);
-      fscanf (file, "%d", &i);   
+    FILE *file = fopen(path, "r");
+    if (file)
+    {
+        int i = 0;
+        char s[MAX_CMD_LENGTH];
+        fgets(s, MAX_CMD_LENGTH, file);
+        while (fgets(s, MAX_CMD_LENGTH, file))
+        {
+            printf("%d: %s", i + 1, s);
+            i++;
+        }
+
+        fclose(file);
     }
-    fclose(file);
-    }
+    printf("\n");
 }
-bool execBuiltin(char *args[], int nArgs)
+bool execBuiltin(char *args[], int nArgs, char path[])
 {
     int noBuiltins = 6, i, switchOwnArg = -1;
     char *builtinList[noBuiltins];
@@ -224,7 +226,7 @@ bool execBuiltin(char *args[], int nArgs)
         execLS(args, nArgs);
         return true;
     case 5:
-        execHistory(args, nArgs);
+        execHistory(args, nArgs, path);
         return true;
     default:
         break;
@@ -270,7 +272,7 @@ char **readFromFile(char *fileName, int *n)
     }
     FILE *readFile;
     char *s = calloc(1000, sizeof(char));
-    readFile = fopen(fileName, "r"); 
+    readFile = fopen(fileName, "r");
 
     if (readFile == NULL)
     {

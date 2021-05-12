@@ -4,9 +4,17 @@
 
 void mySignal(int signo);
 
+void getCurHistoryPath(char path[])
+{
+    strcpy(path, getPwd());
+    strcat(path, "/.history");
+}
+
 int main()
 {
-
+    char historyPath[MAX_ARG_LENGTH * MAX_ARGS];
+    getCurHistoryPath(historyPath);
+    // printf("HIST PATH: %s\n", historyPath);
     int should_run = 1;
     while (should_run == 1)
     {
@@ -16,14 +24,14 @@ int main()
         int status = 1;
 
         char *args[MAX_ARGS];
-        initShell(args);
 
+        initShell(args);
         printf(GREEN);
         printf("OSH>> ");
         printf("\033[0m");
         fflush(stdout);
 
-        input(args);
+        input(args, historyPath);
 
         if (strcmp(args[getNArgs(args) - 1], "&") == 0)
         {
@@ -31,7 +39,7 @@ int main()
             args[getNArgs(args) - 1] = NULL;
         }
 
-        if (!isPipe(args) && execBuiltin(args, getNArgs(args)))
+        if (!isPipe(args) && execBuiltin(args, getNArgs(args), historyPath))
         {
         }
         else
@@ -64,6 +72,7 @@ int main()
 
 void mySignal(int signo)
 {
+
     if (signo == SIGINT)
     {
         printf("Interupt signal\n");
@@ -72,6 +81,9 @@ void mySignal(int signo)
     {
         printf("Stop signal\n");
     }
+    signal(signo, mySignal);
+    signal(signo, mySignal);
+
     printf(GREEN);
     printf("OSH>> ");
     printf("\033[0m");

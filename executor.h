@@ -1,8 +1,9 @@
 #include "builtin.h"
+#include "argumentHandle.h"
 
 void executeArgs(char *args[]);
 
-bool execBuiltin(char *args[], int nArgs);
+bool execBuiltin(char *args[], int nArgs, char path[]);
 
 void writeToFile(char *input[], int x, char *fileName);
 
@@ -26,4 +27,4 @@ void execSort(char *args[], int nArgs);
 
 void execLS(char *args[], int nArgs);
 
-void execHistory(char *args[], int nArgs);
+void execHistory(char *args[], int nArgs, char path[]);

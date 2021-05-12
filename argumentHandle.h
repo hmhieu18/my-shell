@@ -14,7 +14,9 @@ void strToArgs(char *str, char *args[]);
 
 int getLastApperance(char buf[], char chr);
 
-void input(char *args[]);
+void getLastHist(char s[], char path[]);
+
+void input(char *args[], char path[]);
 
 int getCharIndex(char *args[], char chr);
 

@@ -2,19 +2,23 @@
 #include "executor.h"
 #include "argumentHandle.h"
 
+void mySignal(int signo);
+
 int main()
 {
 
     int should_run = 1;
     while (should_run == 1)
     {
+        signal(SIGTSTP, mySignal);
+        signal(SIGINT, mySignal);
 
         int status = 1;
 
         char *args[MAX_ARGS];
         initShell(args);
 
-        printf("\033[1;31m");
+        printf(GREEN);
         printf("OSH>> ");
         printf("\033[0m");
         fflush(stdout);
@@ -56,4 +60,20 @@ int main()
         }
     }
     return 0;
+}
+
+void mySignal(int signo)
+{
+    if (signo == SIGINT)
+    {
+        printf("Interupt signal\n");
+    }
+    else if (signo == SIGTSTP)
+    {
+        printf("Stop signal\n");
+    }
+    printf(GREEN);
+    printf("OSH>> ");
+    printf("\033[0m");
+    fflush(stdout);
 }

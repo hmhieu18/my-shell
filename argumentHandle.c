@@ -101,12 +101,21 @@ void getLastHist(char s[], char path[])
         fscanf(file, "%d", &i);
         char ch;
         fscanf(file, "%c", &ch);
-        int j=0;
-        while (fgets(s, MAX_CMD_LENGTH, file)&&j<i)
+        int j = 0;
+        if (i == 0)
         {
-            j++;
+            printf("No command in history\n");
         }
-        printf("%s\n", s);
+        else
+        {
+
+            while (fgets(s, MAX_CMD_LENGTH, file) && j < i)
+            {
+                j++;
+            }
+            printf("%s\n", s);
+        }
+
         fclose(file);
     }
 }

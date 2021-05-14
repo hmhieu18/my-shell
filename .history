@@ -1,11 +1,5 @@
-10
-ls | tr a-z A-Z
-ls | tr a-z A-Z > out.txt
+4
+
 clear
-quit
-clear
-history
-clear
-history
-quit
+ls 
 exit

@@ -21,7 +21,7 @@ int main()
         signal(SIGTSTP, mySignal);
         signal(SIGINT, mySignal);
 
-        int status = 1;
+        int fg = 1;
 
         char *args[MAX_ARGS];
 
@@ -35,7 +35,7 @@ int main()
 
         if (strcmp(args[getNArgs(args) - 1], "&") == 0)
         {
-            status = 0;
+            fg = 0;
             args[getNArgs(args) - 1] = NULL;
         }
 
@@ -44,12 +44,11 @@ int main()
         }
         else
         {
-
             int pid = fork();
             if (pid > 0)
             {
 
-                if (status == 0)
+                if (fg == 0)
                     continue;
 
                 wait(NULL);
@@ -58,10 +57,8 @@ int main()
             {
 
                 executeArgs(args);
-
                 if (args[0][0] != '\0')
-                    printf("error, command does not exist\n");
-
+                    printf("Syntax error, please check your command again\n");
                 destructArgs(args);
                 exit(1);
             }
@@ -75,11 +72,11 @@ void mySignal(int signo)
 
     if (signo == SIGINT)
     {
-        printf("Interupt signal\n");
+        printf("Received interupt signal\n");
     }
     else if (signo == SIGTSTP)
     {
-        printf("Stop signal\n");
+        printf("Received stop signal\n");
     }
     signal(signo, mySignal);
     signal(signo, mySignal);

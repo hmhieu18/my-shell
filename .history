@@ -1,11 +1,11 @@
 10
-sleep 10 &
-sleep
-sleep 10
-sleep 5
-exit
-exit
-make clean
-make
-exit
+ls | tr a-z A-Z
+ls | tr a-z A-Z > out.txt
+clear
+quit
+clear
+history
+clear
+history
+quit
 exit

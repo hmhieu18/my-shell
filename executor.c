@@ -24,28 +24,28 @@ void redirectingIn(char *args[])
     int indexCmd = getCharIndex(args, '>');
     args[indexCmd] = NULL;
 
-    int fd = open(args[indexCmd + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    int fileDescription = open(args[indexCmd + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
-    if (fd < 0)
+    if (fileDescription < 0)
     {
-        printf("Error Opening File\n");
+        printf("Unable to open file\n");
         return;
     }
 
-    dup2(fd, STDOUT_FILENO);
+    dup2(fileDescription, STDOUT_FILENO);
     execvp(args[0], args);
 
     destructArgs(args);
-    close(fd);
+    close(fileDescription);
 }
 void redirectingOut(char *args[])
 {
     printf("in redireting\n");
-    int index = getCharIndex(args, '<');
-    args[index] = NULL;
+    int id = getCharIndex(args, '<');
+    args[id] = NULL;
 
-    int fd = open(args[index + 1], O_RDONLY);
-    if (fd < 0)
+    int fileDescription = open(args[id + 1], O_RDONLY);
+    if (fileDescription < 0)
     {
 
         destructArgs(args);
@@ -53,11 +53,11 @@ void redirectingOut(char *args[])
     }
     else
     {
-        dup2(fd, STDIN_FILENO);
+        dup2(fileDescription, STDIN_FILENO);
         execvp(args[0], args);
 
         destructArgs(args);
-        close(fd);
+        close(fileDescription);
     }
 }
 
@@ -294,7 +294,7 @@ char **readFromFile(char *fileName, int *n)
 
     if (readFile == NULL)
     {
-        perror("Error while opening the file.\n");
+        perror("Unable to open file\n");
     }
     else
     {
